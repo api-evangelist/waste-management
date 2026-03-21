@@ -1,0 +1,140 @@
+openapi: 3.1.0
+info:
+  title: Waste Management Customer API
+  description: >-
+    The Waste Management Customer API provides RESTful access to customer
+    account information including balance due, contract details, invoice
+    history, service details, and pick-up status. The API uses JWT bearer
+    token authentication and supports JSON and XML response formats.
+  version: '1.0'
+servers:
+  - url: https://api.wm.com
+tags:
+  - name: Customers
+    description: Retrieve customer account and balance information.
+  - name: Services
+    description: Retrieve service details, plans, and materials.
+  - name: Invoices
+    description: Retrieve invoice summaries and details.
+paths:
+  /customers:
+    get:
+      operationId: getCustomerOverview
+      summary: Get customer overview
+      description: >-
+        Retrieves customer account overview including balance due, contact
+        and profile information, and services summary.
+      tags:
+        - Customers
+      responses:
+        '200':
+          description: Success
+  /services:
+    get:
+      operationId: listServices
+      summary: List services
+      description: >-
+        Retrieves detailed information on the services associated with
+        the authenticated customer account.
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Success
+  /services/plan:
+    get:
+      operationId: listPlannedServices
+      summary: List planned services
+      description: >-
+        Retrieves the status of services occurring today for commercial
+        or residential customers.
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Success
+  /services/materials:
+    get:
+      operationId: listServiceMaterials
+      summary: List service materials
+      description: >-
+        Retrieves hauling material information for all services associated
+        with the customer account.
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Success
+  /services/prices/invoice-fees:
+    get:
+      operationId: listServiceInvoiceFees
+      summary: List service invoice fees
+      description: >-
+        Retrieves all invoice fees including fuel, environmental, and
+        regulatory cost recovery fees for services.
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Success
+  /services/operations:
+    get:
+      operationId: listServiceOperations
+      summary: List service operations
+      description: >-
+        Retrieves operational details for services associated with the
+        customer account.
+      tags:
+        - Services
+      responses:
+        '200':
+          description: Success
+  /invoices:
+    get:
+      operationId: listInvoices
+      summary: List invoices
+      description: >-
+        Retrieves a summary of all invoices sent, with optional date
+        range filtering.
+      tags:
+        - Invoices
+      parameters:
+        - name: startDate
+          in: query
+          description: Filter invoices from this date.
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: Filter invoices up to this date.
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+  /invoices/{invoiceId}:
+    get:
+      operationId: getInvoiceDetails
+      summary: Get invoice details
+      description: >-
+        Retrieves all details of a specific invoice by invoice identifier.
+      tags:
+        - Invoices
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          description: The unique invoice identifier.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: JSON Web Token (JWT) provided by WM.
