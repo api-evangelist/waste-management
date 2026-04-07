@@ -12,8 +12,6 @@ servers:
 tags:
   - name: Customers
     description: Retrieve customer account and balance information.
-  - name: Services
-    description: Retrieve service details, plans, and materials.
   - name: Invoices
     description: Retrieve invoice summaries and details.
 paths:
@@ -36,8 +34,7 @@ paths:
       description: >-
         Retrieves detailed information on the services associated with
         the authenticated customer account.
-      tags:
-        - Services
+      tags: []
       responses:
         '200':
           description: Success
@@ -48,8 +45,7 @@ paths:
       description: >-
         Retrieves the status of services occurring today for commercial
         or residential customers.
-      tags:
-        - Services
+      tags: []
       responses:
         '200':
           description: Success
@@ -60,8 +56,7 @@ paths:
       description: >-
         Retrieves hauling material information for all services associated
         with the customer account.
-      tags:
-        - Services
+      tags: []
       responses:
         '200':
           description: Success
@@ -72,8 +67,7 @@ paths:
       description: >-
         Retrieves all invoice fees including fuel, environmental, and
         regulatory cost recovery fees for services.
-      tags:
-        - Services
+      tags: []
       responses:
         '200':
           description: Success
@@ -84,8 +78,7 @@ paths:
       description: >-
         Retrieves operational details for services associated with the
         customer account.
-      tags:
-        - Services
+      tags: []
       responses:
         '200':
           description: Success
