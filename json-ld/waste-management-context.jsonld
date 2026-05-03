@@ -1,0 +1,106 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "wm": "https://api.wm.com/vocab#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "geo": "http://www.w3.org/2003/01/geo/wgs84_pos#",
+
+    "Customer": "schema:Customer",
+    "Invoice": "schema:Invoice",
+    "Service": "wm:WasteCollectionService",
+    "ServiceSchedule": "wm:ServiceSchedule",
+    "ServiceETA": "wm:ServiceETA",
+    "Contact": "schema:ContactPoint",
+    "Address": "schema:PostalAddress",
+    "ServiceMaterial": "wm:ServiceMaterial",
+    "ServiceEquipment": "wm:ServiceEquipment",
+    "InvoiceFee": "wm:InvoiceFee",
+
+    "customerId": {
+      "@id": "wm:customerId",
+      "@type": "xsd:string"
+    },
+    "accountName": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "balanceDue": {
+      "@id": "wm:balanceDue",
+      "@type": "xsd:decimal"
+    },
+    "serviceId": {
+      "@id": "wm:serviceId",
+      "@type": "xsd:string"
+    },
+    "lineOfBusiness": {
+      "@id": "wm:lineOfBusiness",
+      "@type": "xsd:string"
+    },
+    "occurrenceFrequency": {
+      "@id": "wm:occurrenceFrequency",
+      "@type": "xsd:string"
+    },
+    "serviceName": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "invoiceId": {
+      "@id": "schema:identifier",
+      "@type": "xsd:string"
+    },
+    "invoiceDate": {
+      "@id": "schema:dateIssued",
+      "@type": "xsd:date"
+    },
+    "dueDate": {
+      "@id": "schema:paymentDueDate",
+      "@type": "xsd:date"
+    },
+    "totalAmount": {
+      "@id": "schema:totalPaymentDue",
+      "@type": "xsd:decimal"
+    },
+    "status": {
+      "@id": "schema:orderStatus",
+      "@type": "xsd:string"
+    },
+    "monthlyBaseCost": {
+      "@id": "wm:monthlyBaseCost",
+      "@type": "xsd:decimal"
+    },
+    "currency": {
+      "@id": "schema:priceCurrency",
+      "@type": "xsd:string"
+    },
+    "materialCode": {
+      "@id": "wm:materialCode",
+      "@type": "xsd:string"
+    },
+    "materialName": {
+      "@id": "wm:materialName",
+      "@type": "xsd:string"
+    },
+    "estimatedArrivalStart": {
+      "@id": "wm:estimatedArrivalStart",
+      "@type": "xsd:time"
+    },
+    "estimatedArrivalEnd": {
+      "@id": "wm:estimatedArrivalEnd",
+      "@type": "xsd:time"
+    },
+    "feeType": {
+      "@id": "wm:feeType",
+      "@type": "xsd:string"
+    },
+    "paperlessBilling": {
+      "@id": "wm:paperlessBilling",
+      "@type": "xsd:boolean"
+    },
+    "autoPayEnrolled": {
+      "@id": "wm:autoPayEnrolled",
+      "@type": "xsd:boolean"
+    }
+  }
+}

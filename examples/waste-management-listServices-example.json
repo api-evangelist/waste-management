@@ -1,0 +1,64 @@
+{
+  "summary": "List Services",
+  "request": {
+    "method": "GET",
+    "url": "https://api.wm.com/v1/customers/123456789/services?line_of_business=RESIDENTIAL",
+    "headers": {
+      "Authorization": "Bearer <JWT>",
+      "Request-Tracking-Id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "ClientId": "your-client-id",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "services": [
+        {
+          "serviceId": "SVC-00123",
+          "status": "Active",
+          "occurrenceFrequency": "Weekly",
+          "lineOfBusiness": "RESIDENTIAL",
+          "serviceName": "Residential Garbage Collection",
+          "material": {
+            "materialCode": "MSW",
+            "materialName": "Municipal Solid Waste",
+            "specialHandling": false
+          },
+          "equipment": {
+            "equipmentName": "96 Gallon Cart",
+            "volume": 96,
+            "unitOfMeasure": "gallon",
+            "containerCount": 1
+          },
+          "pricing": {
+            "monthlyBaseCost": 28.75,
+            "currency": "USD"
+          }
+        },
+        {
+          "serviceId": "SVC-00124",
+          "status": "Active",
+          "occurrenceFrequency": "Bi-Weekly",
+          "lineOfBusiness": "RESIDENTIAL",
+          "serviceName": "Residential Recycling Collection",
+          "material": {
+            "materialCode": "RECYCLE",
+            "materialName": "Single-Stream Recyclables",
+            "specialHandling": false
+          },
+          "equipment": {
+            "equipmentName": "96 Gallon Recycling Cart",
+            "volume": 96,
+            "unitOfMeasure": "gallon",
+            "containerCount": 1
+          },
+          "pricing": {
+            "monthlyBaseCost": 12.50,
+            "currency": "USD"
+          }
+        }
+      ]
+    }
+  }
+}

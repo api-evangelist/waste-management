@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.wm.com/schemas/service.json",
+  "title": "Waste Management Service",
+  "description": "Schema for a Waste Management service record associated with a customer account, covering collection type, materials, equipment, and pricing.",
+  "type": "object",
+  "required": ["serviceId", "status", "lineOfBusiness", "serviceName"],
+  "properties": {
+    "serviceId": {
+      "type": "string",
+      "description": "Unique identifier for the service."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Active", "Suspended", "Cancelled"],
+      "description": "Current status of the service."
+    },
+    "occurrenceFrequency": {
+      "type": "string",
+      "description": "Service pickup frequency (e.g., Weekly, Bi-Weekly, Monthly)."
+    },
+    "lineOfBusiness": {
+      "type": "string",
+      "enum": ["RESIDENTIAL", "COMMERCIAL", "ROLLOFF"],
+      "description": "Line of business this service belongs to."
+    },
+    "serviceName": {
+      "type": "string",
+      "description": "Human-readable name of the service."
+    },
+    "material": {
+      "type": "object",
+      "description": "Hauling material details for this service.",
+      "properties": {
+        "materialCode": {
+          "type": "string",
+          "description": "Short code identifying the material type."
+        },
+        "materialName": {
+          "type": "string",
+          "description": "Full name of the material (e.g., Municipal Solid Waste)."
+        },
+        "specialHandling": {
+          "type": "boolean",
+          "description": "Whether this material requires special handling procedures."
+        }
+      }
+    },
+    "equipment": {
+      "type": "object",
+      "description": "Container and equipment details for this service.",
+      "properties": {
+        "equipmentName": {
+          "type": "string",
+          "description": "Name of the equipment (e.g., 96 Gallon Cart)."
+        },
+        "volume": {
+          "type": "number",
+          "description": "Container volume."
+        },
+        "unitOfMeasure": {
+          "type": "string",
+          "description": "Unit for the volume (e.g., gallon, cubic yard)."
+        },
+        "containerCount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of containers for this service."
+        }
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "description": "Pricing information for this service.",
+      "properties": {
+        "monthlyBaseCost": {
+          "type": "number",
+          "description": "Monthly base cost before fees and surcharges."
+        },
+        "currency": {
+          "type": "string",
+          "default": "USD",
+          "description": "Currency code for pricing (ISO 4217)."
+        }
+      }
+    }
+  }
+}

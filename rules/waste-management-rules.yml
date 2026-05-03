@@ -1,0 +1,108 @@
+extends: spectral:oas
+rules:
+  # WM API requires Request-Tracking-Id and ClientId headers on all operations
+  wm-required-request-tracking-header:
+    description: All operations must accept a Request-Tracking-Id header parameter.
+    message: "Operation '{{title}}' is missing the required Request-Tracking-Id header parameter."
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            properties:
+              name:
+                const: Request-Tracking-Id
+              in:
+                const: header
+
+  wm-required-client-id-header:
+    description: All operations must accept a ClientId header parameter.
+    message: "Operation '{{title}}' is missing the required ClientId header parameter."
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: parameters
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          contains:
+            type: object
+            properties:
+              name:
+                const: ClientId
+              in:
+                const: header
+
+  # WM API uses JWT bearer auth — all operations must declare security
+  wm-bearer-auth-required:
+    description: All WM API operations must declare bearerAuth security.
+    message: "Operation '{{title}}' must declare bearerAuth security requirement."
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: security
+      function: defined
+
+  # Customer ID path parameter must be named customerId
+  wm-customer-id-path-param-name:
+    description: Path parameters for customer identifiers must be named customerId.
+    message: "Customer path parameters should be named 'customerId'."
+    severity: warning
+    given: "$.paths['/customers/{customerId}*'][*].parameters[?(@.in == 'path')]"
+    then:
+      field: name
+      function: enumeration
+      functionOptions:
+        values:
+          - customerId
+          - serviceId
+          - invoiceId
+
+  # All responses must include 401 Unauthorized
+  wm-401-response-required:
+    description: All authenticated operations must document a 401 Unauthorized response.
+    message: "Operation '{{title}}' is missing a 401 Unauthorized response."
+    severity: warning
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      field: "401"
+      function: defined
+
+  # Operation IDs must use camelCase
+  wm-operation-id-camel-case:
+    description: Operation IDs must use camelCase naming convention.
+    message: "OperationId '{{value}}' must use camelCase."
+    severity: warning
+    given: "$.paths[*][*].operationId"
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+
+  # Summaries must use Title Case
+  wm-summary-title-case:
+    description: Operation summaries must use Title Case.
+    message: "Summary '{{value}}' should use Title Case."
+    severity: info
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9]*([ ][A-Z][a-zA-Z0-9]*)*$"
+
+  # API servers must use HTTPS
+  wm-https-servers:
+    description: All server URLs must use HTTPS.
+    message: "Server URL '{{value}}' must use HTTPS."
+    severity: error
+    given: "$.servers[*].url"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"

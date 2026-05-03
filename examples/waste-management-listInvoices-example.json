@@ -1,0 +1,41 @@
+{
+  "summary": "List Invoices",
+  "request": {
+    "method": "GET",
+    "url": "https://api.wm.com/v1/customers/123456789/invoices?startDate=2026-01-01&endDate=2026-04-30",
+    "headers": {
+      "Authorization": "Bearer <JWT>",
+      "Request-Tracking-Id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "ClientId": "your-client-id",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "invoices": [
+        {
+          "invoiceId": "INV-2026-0401",
+          "invoiceDate": "2026-04-01",
+          "dueDate": "2026-04-21",
+          "totalAmount": 145.50,
+          "status": "Unpaid"
+        },
+        {
+          "invoiceId": "INV-2026-0301",
+          "invoiceDate": "2026-03-01",
+          "dueDate": "2026-03-21",
+          "totalAmount": 141.25,
+          "status": "Paid"
+        },
+        {
+          "invoiceId": "INV-2026-0201",
+          "invoiceDate": "2026-02-01",
+          "dueDate": "2026-02-21",
+          "totalAmount": 141.25,
+          "status": "Paid"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Waste Management Service",
+  "description": "Structure of a WM service record returned from the Customer API",
+  "type": "object",
+  "fields": [
+    { "name": "serviceId", "type": "string", "required": true, "description": "Unique service identifier" },
+    { "name": "status", "type": "string", "required": true, "description": "Active, Suspended, or Cancelled" },
+    { "name": "occurrenceFrequency", "type": "string", "required": false, "description": "Weekly, Bi-Weekly, etc." },
+    { "name": "lineOfBusiness", "type": "string", "required": true, "description": "RESIDENTIAL, COMMERCIAL, or ROLLOFF" },
+    { "name": "serviceName", "type": "string", "required": true, "description": "Human-readable service name" },
+    {
+      "name": "material",
+      "type": "object",
+      "required": false,
+      "fields": [
+        { "name": "materialCode", "type": "string" },
+        { "name": "materialName", "type": "string" },
+        { "name": "specialHandling", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "equipment",
+      "type": "object",
+      "required": false,
+      "fields": [
+        { "name": "equipmentName", "type": "string" },
+        { "name": "volume", "type": "number" },
+        { "name": "unitOfMeasure", "type": "string" },
+        { "name": "containerCount", "type": "integer" }
+      ]
+    },
+    {
+      "name": "pricing",
+      "type": "object",
+      "required": false,
+      "fields": [
+        { "name": "monthlyBaseCost", "type": "number" },
+        { "name": "currency", "type": "string", "example": "USD" }
+      ]
+    }
+  ]
+}

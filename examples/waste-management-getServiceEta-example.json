@@ -1,0 +1,24 @@
+{
+  "summary": "Get Service ETA",
+  "request": {
+    "method": "GET",
+    "url": "https://api.wm.com/v1/customers/123456789/services/SVC-00123/eta",
+    "headers": {
+      "Authorization": "Bearer <JWT>",
+      "Request-Tracking-Id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "ClientId": "your-client-id",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "serviceId": "SVC-00123",
+      "date": "2026-05-03",
+      "estimatedArrivalStart": "10:00",
+      "estimatedArrivalEnd": "14:00",
+      "status": "Scheduled",
+      "completed": false
+    }
+  }
+}

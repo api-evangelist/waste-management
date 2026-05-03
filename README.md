@@ -1,38 +1,86 @@
-# Waste Management (waste-management)
-Waste Management, Inc. (WM) is North America's leading provider of comprehensive waste management environmental services, offering collection, transfer, disposal, and recycling services. The company provides a RESTful API at api.wm.com enabling third-party developers to access customer account information including balance due, contract details, invoice history, service details, and pick-up status.
+# Waste Management
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/waste-management/refs/heads/main/apis.yml)
+Waste Management (WM) is the largest environmental services company in North America, providing waste collection, transfer, disposal, and recycling services to over 20 million residential, commercial, industrial, and municipal customers. WM provides RESTful APIs for customers and third-party integrators to access account data including balance, services, invoices, pickup schedules, and ETAs via JWT authentication.
 
-## Scope
-- **Type:** Contract
-- **Position:** Consuming
-- **Access:** 3rd-Party
+**Website:** https://www.wm.com  
+**API Portal:** https://api.wm.com/  
+**APIs.json:** https://raw.githubusercontent.com/api-evangelist/waste-management/refs/heads/main/apis.yml
 
-## Tags:
- - Waste Services, Invoices, Services, Customer Data
+## Tags
 
-## Timestamps
-- **Created:** 2026-03-21
-- **Modified:** 2026-03-21
+Environmental Services, Fortune 500, Recycling, Solid Waste, Sustainability, Waste Management
+
+---
 
 ## APIs
 
 ### Waste Management Customer API
-The Waste Management Customer API provides RESTful access to customer account information including balance due, contract details, invoice history, service details, and pick-up status. The API uses JWT bearer token authentication and supports JSON and XML response formats for integration with third-party applications.
 
-**Human URL:** [https://api.wm.com/](https://api.wm.com/)
+RESTful API providing access to customer account data including balance due, contract details, invoice history, service details, pickup schedules, ETAs, contacts, and preferences. Requires JWT bearer authentication plus ClientId and Request-Tracking-Id headers.
 
-#### Tags:
- - Waste Services, Invoices, Services, Customer Data
+- **Documentation:** https://api.wm.com/
+- **OpenAPI:** [openapi/waste-management-customer-api-openapi.yml](openapi/waste-management-customer-api-openapi.yml)
 
-#### Properties
-- [Documentation](https://api.wm.com/)
-- [OpenAPI](openapi/waste-management-customer-api-openapi.yml)
+---
 
-## Common Properties
-- [API Portal](https://api.wm.com/)
-- [Website](https://www.wm.com/)
+## Artifacts
+
+### OpenAPI Specifications
+
+| File | Description |
+|------|-------------|
+| [openapi/waste-management-customer-api-openapi.yml](openapi/waste-management-customer-api-openapi.yml) | Full Customer API covering account, services, invoices, contacts, preferences, and ETAs |
+
+### Spectral Rules
+
+| File | Description |
+|------|-------------|
+| [rules/waste-management-rules.yml](rules/waste-management-rules.yml) | Spectral ruleset enforcing WM API conventions: required headers, bearer auth, HTTPS, Title Case summaries |
+
+### Naftiko Capabilities
+
+| File | Description |
+|------|-------------|
+| [capabilities/customer-service.yaml](capabilities/customer-service.yaml) | Unified customer service workflow — 14 MCP tools covering account, services, pickup, billing, and preferences |
+| [capabilities/shared/customer-api.yaml](capabilities/shared/customer-api.yaml) | Shared per-API definition for the WM Customer API |
+
+### JSON Schemas
+
+| File | Description |
+|------|-------------|
+| [json-schema/waste-management-service-schema.json](json-schema/waste-management-service-schema.json) | Service record schema with material, equipment, and pricing fields |
+| [json-schema/waste-management-invoice-schema.json](json-schema/waste-management-invoice-schema.json) | Invoice schema with line items and fee types |
+
+### JSON Structures
+
+| File | Description |
+|------|-------------|
+| [json-structure/waste-management-service-structure.json](json-structure/waste-management-service-structure.json) | Service field structure documentation |
+
+### JSON-LD Contexts
+
+| File | Description |
+|------|-------------|
+| [json-ld/waste-management-context.jsonld](json-ld/waste-management-context.jsonld) | JSON-LD context mapping WM API fields to schema.org |
+
+### Examples
+
+| File | Description |
+|------|-------------|
+| [examples/waste-management-getCustomerOverview-example.json](examples/waste-management-getCustomerOverview-example.json) | Get Customer Overview request/response |
+| [examples/waste-management-listServices-example.json](examples/waste-management-listServices-example.json) | List Services request/response |
+| [examples/waste-management-listInvoices-example.json](examples/waste-management-listInvoices-example.json) | List Invoices request/response with date filtering |
+| [examples/waste-management-getServiceEta-example.json](examples/waste-management-getServiceEta-example.json) | Get Service ETA request/response |
+
+### Vocabulary
+
+| File | Description |
+|------|-------------|
+| [vocabulary/waste-management-vocabulary.yml](vocabulary/waste-management-vocabulary.yml) | Domain vocabulary: Line of Business, Service ETA, Invoice Fee, AutoPay, Material, Request Tracking ID |
+
+---
 
 ## Maintainers
-**FN:** API Evangelist
-**Email:** info@apievangelist.com
+
+**FN:** Kin Lane  
+**Email:** kin@apievangelist.com

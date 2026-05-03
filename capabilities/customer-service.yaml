@@ -1,0 +1,374 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Waste Management Customer Service"
+  description: >-
+    Unified customer service capability for Waste Management accounts. Combines
+    account management, service scheduling, ETA tracking, and billing operations
+    to support residential and commercial customer self-service workflows.
+  tags:
+    - Waste Management
+    - Customer Service
+    - Billing
+    - Service Scheduling
+    - Account Management
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      WM_JWT_TOKEN: WM_JWT_TOKEN
+      WM_CLIENT_ID: WM_CLIENT_ID
+
+capability:
+  consumes:
+    - import: wm-customer
+      location: ./shared/customer-api.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: wm-customer-service-api
+      description: "Unified REST API for Waste Management customer service workflows."
+      resources:
+        - path: /v1/account
+          name: account
+          description: "Customer account overview with balance and profile."
+          operations:
+            - method: GET
+              name: get-account-overview
+              description: "Get customer account overview including balance and contact details."
+              call: "wm-customer.get-customer-overview"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/balance
+          name: balance
+          description: "Current balance due on the account."
+          operations:
+            - method: GET
+              name: get-balance
+              description: "Get the current balance due."
+              call: "wm-customer.get-balance"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services
+          name: services
+          description: "All waste and recycling services for the account."
+          operations:
+            - method: GET
+              name: list-services
+              description: "List all services for the customer."
+              call: "wm-customer.list-services"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/planned
+          name: planned-services
+          description: "Services scheduled for pickup today."
+          operations:
+            - method: GET
+              name: list-planned-services
+              description: "Get today's planned service schedule."
+              call: "wm-customer.list-planned-services"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/next-pickup
+          name: next-pickup
+          description: "Next scheduled garbage and recycling pickup."
+          operations:
+            - method: GET
+              name: get-next-pickup
+              description: "Get upcoming pickup schedule."
+              call: "wm-customer.get-next-pickup"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/{serviceId}/eta
+          name: service-eta
+          description: "Estimated time of arrival for a service."
+          operations:
+            - method: GET
+              name: get-service-eta
+              description: "Get ETA for today's scheduled pickup."
+              call: "wm-customer.get-service-eta"
+              with:
+                customerId: "rest.customerId"
+                serviceId: "rest.serviceId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/invoices
+          name: invoices
+          description: "Invoice history and billing records."
+          operations:
+            - method: GET
+              name: list-invoices
+              description: "List all invoices with optional date range."
+              call: "wm-customer.list-invoices"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/invoices/{invoiceId}
+          name: invoice-detail
+          description: "Full invoice details with line items and fees."
+          operations:
+            - method: GET
+              name: get-invoice-details
+              description: "Get details for a specific invoice."
+              call: "wm-customer.get-invoice-details"
+              with:
+                customerId: "rest.customerId"
+                invoiceId: "rest.invoiceId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/contacts
+          name: contacts
+          description: "Billing and service contact management."
+          operations:
+            - method: GET
+              name: list-contacts
+              description: "List billing and service contacts."
+              call: "wm-customer.list-contacts"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: update-contacts
+              description: "Update billing or service contact information."
+              call: "wm-customer.update-contacts"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/preferences
+          name: preferences
+          description: "Customer billing and notification preferences."
+          operations:
+            - method: GET
+              name: get-preferences
+              description: "Get paperless billing and autopay preferences."
+              call: "wm-customer.list-preferences"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: update-preferences
+              description: "Update paperless billing or autopay enrollment."
+              call: "wm-customer.update-preferences"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: wm-customer-service-mcp
+      transport: http
+      description: "MCP server for AI-assisted Waste Management customer service."
+      tools:
+        - name: get-account-overview
+          description: "Get the WM customer account overview including balance due and contact information."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-customer-overview"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-balance
+          description: "Get the current amount due on the WM customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-balance"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-services
+          description: "List all active waste and recycling collection services for the customer."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-services"
+          with:
+            customerId: "tools.customerId"
+            line_of_business: "tools.line_of_business"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-planned-services
+          description: "Check which waste collection services are scheduled for pickup today."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-planned-services"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-next-pickup
+          description: "Find out when the next garbage and recycling pickup is scheduled."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-next-pickup"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-service-eta
+          description: "Get the estimated arrival window for a WM truck on a scheduled service day."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-service-eta"
+          with:
+            customerId: "tools.customerId"
+            serviceId: "tools.serviceId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-invoices
+          description: "List WM billing invoices, optionally filtered by date range."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-invoices"
+          with:
+            customerId: "tools.customerId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-invoice-details
+          description: "Get the full breakdown of a specific WM invoice including fees and line items."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-invoice-details"
+          with:
+            customerId: "tools.customerId"
+            invoiceId: "tools.invoiceId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-contacts
+          description: "List billing and service contacts on the WM customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-contacts"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: update-contacts
+          description: "Update contact name, email, or phone number on the WM customer account."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "wm-customer.update-contacts"
+          with:
+            customerId: "tools.customerId"
+            firstName: "tools.firstName"
+            lastName: "tools.lastName"
+            email: "tools.email"
+            phone: "tools.phone"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-preferences
+          description: "Check if the WM customer is enrolled in paperless billing or autopay."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-preferences"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: update-preferences
+          description: "Enroll or unenroll the WM customer in paperless billing or automatic payment."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "wm-customer.update-preferences"
+          with:
+            customerId: "tools.customerId"
+            paperlessBilling: "tools.paperlessBilling"
+            autoPayEnrolled: "tools.autoPayEnrolled"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-service-materials
+          description: "Get the types of materials (garbage, recycling, yard waste) collected for each service."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-service-materials"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-service-fees
+          description: "Get the breakdown of fuel surcharges, environmental fees, and regulatory recovery fees on services."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-service-invoice-fees"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."

@@ -6,92 +6,234 @@ info:
     account information including balance due, contract details, invoice
     history, service details, and pick-up status. The API uses JWT bearer
     token authentication and supports JSON and XML response formats.
+    Endpoints are organized under the customer resource and cover activities,
+    balance, cases, contacts, invoices, preferences, profiles, services,
+    and tickets.
   version: '1.0'
+  contact:
+    name: Waste Management Developer Support
+    url: https://api.wm.com/
 servers:
-  - url: https://api.wm.com
+  - url: https://api.wm.com/v1
+    description: Production
+  - url: https://apitest.wm.com/v1
+    description: Test
 tags:
   - name: Customers
-    description: Retrieve customer account and balance information.
+    description: Retrieve and manage customer account information.
+  - name: Services
+    description: Retrieve service details, schedules, materials, and ETAs.
   - name: Invoices
     description: Retrieve invoice summaries and details.
+  - name: Contacts
+    description: Manage billing and service contacts.
+  - name: Cases
+    description: Retrieve and manage customer service cases.
+  - name: Tickets
+    description: Retrieve disposal tickets and summaries.
+  - name: Preferences
+    description: Retrieve and update customer preference settings.
 paths:
   /customers:
     get:
       operationId: getCustomerOverview
-      summary: Get customer overview
+      summary: Get Customer Overview
       description: >-
         Retrieves customer account overview including balance due, contact
         and profile information, and services summary.
       tags:
         - Customers
+      parameters:
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /services:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /customers/{customerId}/services:
     get:
       operationId: listServices
-      summary: List services
+      summary: List Services
       description: >-
         Retrieves detailed information on the services associated with
-        the authenticated customer account.
-      tags: []
+        the authenticated customer account, including service type, materials,
+        equipment, and pricing.
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+        - name: line_of_business
+          in: query
+          description: Filter services by line of business.
+          schema:
+            type: string
+            enum: [RESIDENTIAL, COMMERCIAL, ROLLOFF]
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /services/plan:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{customerId}/services/plan:
     get:
       operationId: listPlannedServices
-      summary: List planned services
+      summary: List Planned Services
       description: >-
         Retrieves the status of services occurring today for commercial
         or residential customers.
-      tags: []
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /services/materials:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/services/materials:
     get:
       operationId: listServiceMaterials
-      summary: List service materials
+      summary: List Service Materials
       description: >-
         Retrieves hauling material information for all services associated
         with the customer account.
-      tags: []
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /services/prices/invoice-fees:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/services/prices/invoice-fees:
     get:
       operationId: listServiceInvoiceFees
-      summary: List service invoice fees
+      summary: List Service Invoice Fees
       description: >-
         Retrieves all invoice fees including fuel, environmental, and
         regulatory cost recovery fees for services.
-      tags: []
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /services/operations:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/services/operations:
     get:
       operationId: listServiceOperations
-      summary: List service operations
+      summary: List Service Operations
       description: >-
         Retrieves operational details for services associated with the
         customer account.
-      tags: []
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /invoices:
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/services/next-pickup:
+    get:
+      operationId: getNextPickup
+      summary: Get Next Pickup
+      description: >-
+        Retrieves upcoming pickup schedule information for the customer's
+        waste and recycling services.
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/services/{serviceId}/eta:
+    get:
+      operationId: getServiceEta
+      summary: Get Service ETA
+      description: >-
+        Retrieves the estimated time of arrival (ETA) for a specific
+        service, indicating when the service is expected or if it has
+        already been completed.
+      tags:
+        - Services
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - name: serviceId
+          in: path
+          required: true
+          description: The unique service identifier.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{customerId}/invoices:
     get:
       operationId: listInvoices
-      summary: List invoices
+      summary: List Invoices
       description: >-
         Retrieves a summary of all invoices sent, with optional date
         range filtering.
       tags:
         - Invoices
       parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
         - name: startDate
           in: query
           description: Filter invoices from this date.
@@ -104,30 +246,468 @@ paths:
           schema:
             type: string
             format: date
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
-  /invoices/{invoiceId}:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/invoices/{invoiceId}:
     get:
       operationId: getInvoiceDetails
-      summary: Get invoice details
+      summary: Get Invoice Details
       description: >-
         Retrieves all details of a specific invoice by invoice identifier.
       tags:
         - Invoices
       parameters:
+        - $ref: '#/components/parameters/CustomerId'
         - name: invoiceId
           in: path
           required: true
           description: The unique invoice identifier.
           schema:
             type: string
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /customers/{customerId}/balance:
+    get:
+      operationId: getBalance
+      summary: Get Balance
+      description: >-
+        Retrieves the current account balance due for the customer.
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/contacts:
+    get:
+      operationId: listContacts
+      summary: List Contacts
+      description: >-
+        Retrieves billing and service contacts associated with the customer account.
+      tags:
+        - Contacts
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateContacts
+      summary: Update Contacts
+      description: >-
+        Updates billing and service contact information for the customer account.
+      tags:
+        - Contacts
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUpdate'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/cases:
+    get:
+      operationId: listCases
+      summary: List Cases
+      description: >-
+        Retrieves customer service cases associated with the account.
+      tags:
+        - Cases
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/preferences:
+    get:
+      operationId: listPreferences
+      summary: List Preferences
+      description: >-
+        Retrieves customer preference settings including paperless billing
+        and automatic payment preferences.
+      tags:
+        - Preferences
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updatePreferences
+      summary: Update Preferences
+      description: >-
+        Updates customer preference settings such as paperless billing
+        and automatic payment enrollment.
+      tags:
+        - Preferences
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreferencesUpdate'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /customers/{customerId}/tickets:
+    get:
+      operationId: listTickets
+      summary: List Tickets
+      description: >-
+        Retrieves support and disposal tickets associated with the customer account.
+      tags:
+        - Tickets
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+        - $ref: '#/components/parameters/RequestTrackingId'
+        - $ref: '#/components/parameters/ClientId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+      bearerFormat: JWT
       description: JSON Web Token (JWT) provided by WM.
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request — validation error in request parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    CustomerOverview:
+      type: object
+      description: Overview of a WM customer account.
+      properties:
+        customerId:
+          type: string
+          description: Unique customer identifier.
+        accountName:
+          type: string
+          description: Customer account name.
+        balanceDue:
+          type: number
+          format: decimal
+          description: Current balance due on the account.
+        primaryContact:
+          $ref: '#/components/schemas/Contact'
+        serviceAddress:
+          $ref: '#/components/schemas/Address'
+    Contact:
+      type: object
+      description: Contact information for a customer.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+    Address:
+      type: object
+      description: Physical service or billing address.
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+    ContactUpdate:
+      type: object
+      description: Fields to update on a customer contact record.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+    ServiceList:
+      type: object
+      description: List of services associated with a WM customer account.
+      properties:
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+    Service:
+      type: object
+      description: A WM service associated with a customer account.
+      properties:
+        serviceId:
+          type: string
+          description: Unique service identifier.
+        status:
+          type: string
+          description: Current service status.
+        occurrenceFrequency:
+          type: string
+          description: Service frequency (e.g., Weekly, Bi-Weekly).
+        lineOfBusiness:
+          type: string
+          enum: [RESIDENTIAL, COMMERCIAL, ROLLOFF]
+          description: Line of business for this service.
+        serviceName:
+          type: string
+          description: Human-readable service name.
+        material:
+          $ref: '#/components/schemas/ServiceMaterial'
+        equipment:
+          $ref: '#/components/schemas/ServiceEquipment'
+        pricing:
+          $ref: '#/components/schemas/ServicePricing'
+    ServiceMaterial:
+      type: object
+      description: Material information for a service.
+      properties:
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        specialHandling:
+          type: boolean
+    ServiceEquipment:
+      type: object
+      description: Equipment details for a service.
+      properties:
+        equipmentName:
+          type: string
+        volume:
+          type: number
+        unitOfMeasure:
+          type: string
+        containerCount:
+          type: integer
+    ServicePricing:
+      type: object
+      description: Pricing information for a service.
+      properties:
+        monthlyBaseCost:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: USD
+    InvoiceList:
+      type: object
+      description: List of invoices for a WM customer account.
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceSummary'
+    InvoiceSummary:
+      type: object
+      description: Summary information for a WM invoice.
+      properties:
+        invoiceId:
+          type: string
+          description: Unique invoice identifier.
+        invoiceDate:
+          type: string
+          format: date
+          description: Date the invoice was issued.
+        dueDate:
+          type: string
+          format: date
+          description: Payment due date.
+        totalAmount:
+          type: number
+          format: decimal
+          description: Total invoice amount.
+        status:
+          type: string
+          description: Invoice status (e.g., Paid, Unpaid, Overdue).
+    InvoiceDetail:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceSummary'
+        - type: object
+          description: Detailed invoice information including line items.
+          properties:
+            lineItems:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceLineItem'
+            fees:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceFee'
+    InvoiceLineItem:
+      type: object
+      description: A line item on a WM invoice.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        serviceId:
+          type: string
+    InvoiceFee:
+      type: object
+      description: A fee applied to a WM invoice (fuel, environmental, regulatory).
+      properties:
+        feeType:
+          type: string
+          description: Type of fee (e.g., Fuel Surcharge, Environmental Fee).
+        amount:
+          type: number
+          format: decimal
+    PreferencesUpdate:
+      type: object
+      description: Customer preference update payload.
+      properties:
+        paperlessBilling:
+          type: boolean
+          description: Opt into paperless billing.
+        autoPayEnrolled:
+          type: boolean
+          description: Enroll in automatic payment processing.
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string

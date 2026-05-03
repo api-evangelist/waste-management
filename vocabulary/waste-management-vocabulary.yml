@@ -1,0 +1,111 @@
+vocabulary:
+  name: Waste Management Vocabulary
+  description: >-
+    Domain vocabulary for Waste Management (WM), the largest waste management
+    company in North America. Covers customer account management, waste
+    collection services, billing, and pickup scheduling operations.
+  version: '1.0'
+  created: '2026-05-03'
+  modified: '2026-05-03'
+  tags:
+    - Waste Management
+    - Environmental Services
+    - Fortune 500
+  terms:
+    - term: Customer Account
+      definition: >-
+        A WM account record associated with a residential or commercial
+        service address. Identified by a unique customerId, it holds
+        service subscriptions, billing history, contacts, and preferences.
+      tags:
+        - Core Concept
+    - term: Line of Business
+      definition: >-
+        A classification of waste collection service types. WM operates
+        three primary lines of business: RESIDENTIAL (household garbage
+        and recycling), COMMERCIAL (dumpsters and compactors for businesses),
+        and ROLLOFF (temporary roll-off containers for construction and cleanup).
+      tags:
+        - Service Classification
+    - term: Service ETA
+      definition: >-
+        Estimated Time of Arrival — the projected time window during which
+        a WM collection vehicle is expected to arrive at the service address
+        on a scheduled pickup day. Retrieved via the /services/{serviceId}/eta
+        endpoint.
+      tags:
+        - Service Scheduling
+    - term: Planned Service
+      definition: >-
+        A service occurrence that is scheduled for execution today. The
+        planned services endpoint returns services with their current
+        execution status (pending, in progress, completed) for the day.
+      tags:
+        - Service Scheduling
+    - term: Invoice
+      definition: >-
+        A WM billing document issued periodically (typically monthly)
+        to a customer account. Invoices itemize base service charges plus
+        surcharges (fuel, environmental, regulatory) for each active service.
+      tags:
+        - Billing
+    - term: Invoice Fee
+      definition: >-
+        A surcharge applied to a WM invoice in addition to base service
+        costs. Common fee types include Fuel Surcharge (variable based on
+        fuel prices), Environmental Fee (regulatory compliance costs), and
+        Regulatory Cost Recovery.
+      tags:
+        - Billing
+    - term: Paperless Billing
+      definition: >-
+        A customer preference to receive invoices electronically via email
+        instead of paper mail. Paperless billing enrollment is managed via
+        the customer preferences endpoint.
+      tags:
+        - Customer Preferences
+        - Sustainability
+    - term: AutoPay
+      definition: >-
+        Automatic payment enrollment that authorizes WM to charge the
+        customer's payment method on file automatically when invoices
+        come due, avoiding late fees.
+      tags:
+        - Customer Preferences
+        - Billing
+    - term: Service Material
+      definition: >-
+        The type of waste material collected by a WM service, identified
+        by a material code (e.g., MSW for Municipal Solid Waste, RECYCLE
+        for single-stream recyclables, ORGANIC for yard/food waste).
+      tags:
+        - Service Definition
+    - term: Roll-Off Container
+      definition: >-
+        A large, open-top dumpster (typically 10-40 cubic yards) delivered
+        to a site for temporary use during construction, demolition, or
+        large cleanouts. Roll-off service is billed per pull or per ton.
+      tags:
+        - Service Type
+    - term: Service Occurrence Frequency
+      definition: >-
+        How often a scheduled service is performed. Common frequencies
+        include Weekly, Bi-Weekly (every two weeks), Monthly, On-Call,
+        and As Needed.
+      tags:
+        - Service Scheduling
+    - term: Client ID
+      definition: >-
+        A WM-issued identifier that API consumers must include in the
+        ClientId request header on every API call. Used together with
+        a JWT bearer token to authenticate API requests.
+      tags:
+        - Authentication
+    - term: Request Tracking ID
+      definition: >-
+        A UUID that API consumers generate and include in the
+        Request-Tracking-Id header on every API call. Used for
+        correlating requests in WM's API logs for support and debugging.
+      tags:
+        - API
+        - Observability

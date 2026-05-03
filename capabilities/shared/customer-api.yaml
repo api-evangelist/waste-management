@@ -1,0 +1,732 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Waste Management Customer API"
+  description: "RESTful API for accessing WM customer account data including balance, services, invoices, contacts, and pickup schedules via JWT bearer authentication."
+  tags:
+    - Waste Management
+    - Customer
+    - Billing
+    - Services
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      WM_JWT_TOKEN: WM_JWT_TOKEN
+      WM_CLIENT_ID: WM_CLIENT_ID
+
+capability:
+  consumes:
+    - type: http
+      namespace: wm-customer
+      baseUri: https://api.wm.com/v1
+      description: "Waste Management Customer API providing account, service, and billing data."
+      authentication:
+        type: bearer
+        token: "{{WM_JWT_TOKEN}}"
+      resources:
+        - name: customers
+          path: /customers
+          description: "Customer account overview including balance and contact information."
+          operations:
+            - name: get-customer-overview
+              method: GET
+              description: "Retrieve customer account overview including balance due and contact info."
+              inputParameters:
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique identifier for tracking the request."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: services
+          path: /customers/{customerId}/services
+          description: "Services associated with the customer account."
+          operations:
+            - name: list-services
+              method: GET
+              description: "List all services for a customer including materials, equipment, and pricing."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: line_of_business
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter by RESIDENTIAL, COMMERCIAL, or ROLLOFF."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: list-planned-services
+              method: GET
+              description: "Retrieve today's planned service schedule for the customer."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: get-next-pickup
+              method: GET
+              description: "Get upcoming pickup schedule for the customer's waste and recycling services."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: get-service-eta
+              method: GET
+              description: "Get estimated arrival time for a specific service."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: serviceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique service identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: list-service-materials
+              method: GET
+              description: "Retrieve hauling material information for all customer services."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: list-service-invoice-fees
+              method: GET
+              description: "Retrieve invoice fees including fuel, environmental, and regulatory surcharges."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: invoices
+          path: /customers/{customerId}/invoices
+          description: "Invoice history and details for the customer account."
+          operations:
+            - name: list-invoices
+              method: GET
+              description: "List all invoices with optional date range filtering."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: startDate
+                  in: query
+                  type: string
+                  required: false
+                  description: "Start date filter (YYYY-MM-DD)."
+                - name: endDate
+                  in: query
+                  type: string
+                  required: false
+                  description: "End date filter (YYYY-MM-DD)."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: get-invoice-details
+              method: GET
+              description: "Retrieve full details for a specific invoice including line items and fees."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: invoiceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique invoice identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: balance
+          path: /customers/{customerId}/balance
+          description: "Current account balance information."
+          operations:
+            - name: get-balance
+              method: GET
+              description: "Retrieve the current balance due on the customer account."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: contacts
+          path: /customers/{customerId}/contacts
+          description: "Billing and service contacts for the customer account."
+          operations:
+            - name: list-contacts
+              method: GET
+              description: "Retrieve billing and service contacts for the account."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: update-contacts
+              method: PATCH
+              description: "Update billing and service contact information."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  firstName: "{{tools.firstName}}"
+                  lastName: "{{tools.lastName}}"
+                  email: "{{tools.email}}"
+                  phone: "{{tools.phone}}"
+
+        - name: preferences
+          path: /customers/{customerId}/preferences
+          description: "Customer preference settings including paperless billing and autopay."
+          operations:
+            - name: list-preferences
+              method: GET
+              description: "Retrieve customer preferences including paperless billing and autopay settings."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: update-preferences
+              method: PATCH
+              description: "Update paperless billing and automatic payment enrollment settings."
+              inputParameters:
+                - name: customerId
+                  in: path
+                  type: string
+                  required: true
+                  description: "Unique WM customer identifier."
+                - name: Request-Tracking-Id
+                  in: header
+                  type: string
+                  required: true
+                  description: "Unique request tracking identifier."
+                - name: ClientId
+                  in: header
+                  type: string
+                  required: true
+                  description: "Client identifier provided by WM."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  paperlessBilling: "{{tools.paperlessBilling}}"
+                  autoPayEnrolled: "{{tools.autoPayEnrolled}}"
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: wm-customer-rest
+      resources:
+        - path: /v1/account
+          name: account
+          description: "Customer account overview."
+          operations:
+            - method: GET
+              name: get-account-overview
+              description: "Get customer account overview."
+              call: "wm-customer.get-customer-overview"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services
+          name: services
+          description: "Customer service listings."
+          operations:
+            - method: GET
+              name: list-services
+              description: "List all customer services."
+              call: "wm-customer.list-services"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/planned
+          name: planned-services
+          description: "Today's planned service schedule."
+          operations:
+            - method: GET
+              name: list-planned-services
+              description: "Get today's planned services."
+              call: "wm-customer.list-planned-services"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/next-pickup
+          name: next-pickup
+          description: "Upcoming pickup schedule."
+          operations:
+            - method: GET
+              name: get-next-pickup
+              description: "Get upcoming pickup schedule."
+              call: "wm-customer.get-next-pickup"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/services/{serviceId}/eta
+          name: service-eta
+          description: "Estimated time of arrival for a service."
+          operations:
+            - method: GET
+              name: get-service-eta
+              description: "Get ETA for a specific service."
+              call: "wm-customer.get-service-eta"
+              with:
+                customerId: "rest.customerId"
+                serviceId: "rest.serviceId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/invoices
+          name: invoices
+          description: "Invoice history."
+          operations:
+            - method: GET
+              name: list-invoices
+              description: "List all invoices."
+              call: "wm-customer.list-invoices"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/invoices/{invoiceId}
+          name: invoice-detail
+          description: "Invoice details."
+          operations:
+            - method: GET
+              name: get-invoice-details
+              description: "Get details for a specific invoice."
+              call: "wm-customer.get-invoice-details"
+              with:
+                customerId: "rest.customerId"
+                invoiceId: "rest.invoiceId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/balance
+          name: balance
+          description: "Current account balance."
+          operations:
+            - method: GET
+              name: get-balance
+              description: "Get current account balance due."
+              call: "wm-customer.get-balance"
+              with:
+                customerId: "rest.customerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: wm-customer-mcp
+      transport: http
+      tools:
+        - name: get-account-overview
+          description: "Retrieve WM customer account overview including balance due and contact information."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-customer-overview"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-services
+          description: "List all waste collection and recycling services for the customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-services"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-planned-services
+          description: "Get today's scheduled waste collection services and their current status."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-planned-services"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-next-pickup
+          description: "Get the next scheduled garbage and recycling pickup date and time window."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-next-pickup"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-service-eta
+          description: "Get estimated arrival time for a specific WM service on its scheduled day."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-service-eta"
+          with:
+            customerId: "tools.customerId"
+            serviceId: "tools.serviceId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-invoices
+          description: "List all WM invoices with optional date range filtering."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-invoices"
+          with:
+            customerId: "tools.customerId"
+            startDate: "tools.startDate"
+            endDate: "tools.endDate"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-invoice-details
+          description: "Get full details for a specific WM invoice including line items and fees."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-invoice-details"
+          with:
+            customerId: "tools.customerId"
+            invoiceId: "tools.invoiceId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-balance
+          description: "Get the current account balance due for the WM customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.get-balance"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-contacts
+          description: "List billing and service contacts on the WM customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-contacts"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: update-contacts
+          description: "Update billing and service contact details on the WM customer account."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "wm-customer.update-contacts"
+          with:
+            customerId: "tools.customerId"
+            firstName: "tools.firstName"
+            lastName: "tools.lastName"
+            email: "tools.email"
+            phone: "tools.phone"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-preferences
+          description: "Get customer preferences for paperless billing and automatic payment."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-preferences"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: update-preferences
+          description: "Update customer preferences to enroll in paperless billing or autopay."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "wm-customer.update-preferences"
+          with:
+            customerId: "tools.customerId"
+            paperlessBilling: "tools.paperlessBilling"
+            autoPayEnrolled: "tools.autoPayEnrolled"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-service-materials
+          description: "Get hauling material information for all services on the customer account."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-service-materials"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-service-invoice-fees
+          description: "Get invoice fee breakdown including fuel, environmental, and regulatory surcharges."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "wm-customer.list-service-invoice-fees"
+          with:
+            customerId: "tools.customerId"
+          outputParameters:
+            - type: object
+              mapping: "$."

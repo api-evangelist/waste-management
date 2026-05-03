@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.wm.com/schemas/invoice.json",
+  "title": "Waste Management Invoice",
+  "description": "Schema for a Waste Management invoice including summary fields, line items, and applied fees.",
+  "type": "object",
+  "required": ["invoiceId", "invoiceDate", "dueDate", "totalAmount", "status"],
+  "properties": {
+    "invoiceId": {
+      "type": "string",
+      "description": "Unique invoice identifier."
+    },
+    "invoiceDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the invoice was issued."
+    },
+    "dueDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Payment due date."
+    },
+    "totalAmount": {
+      "type": "number",
+      "description": "Total invoice amount including all fees."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Paid", "Unpaid", "Overdue", "Void"],
+      "description": "Payment status of the invoice."
+    },
+    "lineItems": {
+      "type": "array",
+      "description": "Individual line items on the invoice.",
+      "items": {
+        "type": "object",
+        "required": ["description", "amount"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description of the line item."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount for this line item."
+          },
+          "serviceId": {
+            "type": "string",
+            "description": "Service ID this line item relates to."
+          }
+        }
+      }
+    },
+    "fees": {
+      "type": "array",
+      "description": "Surcharges and regulatory fees applied to the invoice.",
+      "items": {
+        "type": "object",
+        "required": ["feeType", "amount"],
+        "properties": {
+          "feeType": {
+            "type": "string",
+            "enum": ["Fuel Surcharge", "Environmental Fee", "Regulatory Cost Recovery", "State Fee"],
+            "description": "Type of fee applied."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount of this fee."
+          }
+        }
+      }
+    }
+  }
+}
