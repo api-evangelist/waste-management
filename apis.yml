@@ -58,7 +58,7 @@ common:
     url: json-schema/waste-management-invoice-schema.json
   - type: JSONStructure
     url: json-structure/waste-management-service-structure.json
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/waste-management-context.jsonld
   - type: Vocabulary
     url: vocabulary/waste-management-vocabulary.yml
