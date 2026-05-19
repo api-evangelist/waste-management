@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Waste Management Customer API — Cases
+  description: 'Waste Management Customer API — Cases. 1 operations. Lead operation: List Cases. Self-contained Naftiko capability
+    covering one Waste Management business surface.'
+  tags:
+  - Waste Management
+  - Cases
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WASTE_MANAGEMENT_API_KEY: WASTE_MANAGEMENT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customer-cases
+    baseUri: https://api.wm.com/v1
+    description: Waste Management Customer API — Cases business capability. Self-contained, no shared references.
+    resources:
+    - name: customers-customerId-cases
+      path: /customers/{customerId}/cases
+      operations:
+      - name: listcases
+        method: GET
+        description: List Cases
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.WASTE_MANAGEMENT_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customer-cases-rest
+    port: 8080
+    description: REST adapter for Waste Management Customer API — Cases. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/customers/{customerid}/cases
+      name: customers-customerid-cases
+      description: REST surface for customers-customerId-cases.
+      operations:
+      - method: GET
+        name: listcases
+        description: List Cases
+        call: customer-cases.listcases
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customer-cases-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Waste Management Customer API — Cases. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-cases
+      description: List Cases
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-cases.listcases
+      outputParameters:
+      - type: object
+        mapping: $.

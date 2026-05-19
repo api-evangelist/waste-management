@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Waste Management Customer API — Tickets
+  description: 'Waste Management Customer API — Tickets. 1 operations. Lead operation: List Tickets. Self-contained Naftiko
+    capability covering one Waste Management business surface.'
+  tags:
+  - Waste Management
+  - Tickets
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WASTE_MANAGEMENT_API_KEY: WASTE_MANAGEMENT_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: customer-tickets
+    baseUri: https://api.wm.com/v1
+    description: Waste Management Customer API — Tickets business capability. Self-contained, no shared references.
+    resources:
+    - name: customers-customerId-tickets
+      path: /customers/{customerId}/tickets
+      operations:
+      - name: listtickets
+        method: GET
+        description: List Tickets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.WASTE_MANAGEMENT_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: customer-tickets-rest
+    port: 8080
+    description: REST adapter for Waste Management Customer API — Tickets. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/customers/{customerid}/tickets
+      name: customers-customerid-tickets
+      description: REST surface for customers-customerId-tickets.
+      operations:
+      - method: GET
+        name: listtickets
+        description: List Tickets
+        call: customer-tickets.listtickets
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: customer-tickets-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Waste Management Customer API — Tickets. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-tickets
+      description: List Tickets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: customer-tickets.listtickets
+      outputParameters:
+      - type: object
+        mapping: $.
