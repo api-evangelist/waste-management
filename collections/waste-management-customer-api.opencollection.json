@@ -1,0 +1,657 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Waste Management Customer API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Customer Overview",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves customer account overview including balance due, contact and profile information, and services summary."
+        },
+        {
+          "info": {
+            "name": "Get Balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/balance",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the current account balance due for the customer."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Services",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              },
+              {
+                "name": "line_of_business",
+                "value": "",
+                "type": "query",
+                "description": "Filter services by line of business."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves detailed information on the services associated with the authenticated customer account, including service type, materials, equipment, and pricing."
+        },
+        {
+          "info": {
+            "name": "List Planned Services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/plan",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the status of services occurring today for commercial or residential customers."
+        },
+        {
+          "info": {
+            "name": "List Service Materials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/materials",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves hauling material information for all services associated with the customer account."
+        },
+        {
+          "info": {
+            "name": "List Service Invoice Fees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/prices/invoice-fees",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all invoice fees including fuel, environmental, and regulatory cost recovery fees for services."
+        },
+        {
+          "info": {
+            "name": "List Service Operations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/operations",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves operational details for services associated with the customer account."
+        },
+        {
+          "info": {
+            "name": "Get Next Pickup",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/next-pickup",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves upcoming pickup schedule information for the customer's waste and recycling services."
+        },
+        {
+          "info": {
+            "name": "Get Service ETA",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/services/:serviceId/eta",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              },
+              {
+                "name": "serviceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique service identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the estimated time of arrival (ETA) for a specific service, indicating when the service is expected or if it has already been completed."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Invoices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/invoices",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices from this date."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices up to this date."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a summary of all invoices sent, with optional date range filtering."
+        },
+        {
+          "info": {
+            "name": "Get Invoice Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/invoices/:invoiceId",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              },
+              {
+                "name": "invoiceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique invoice identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all details of a specific invoice by invoice identifier."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Contacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/contacts",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves billing and service contacts associated with the customer account."
+        },
+        {
+          "info": {
+            "name": "Update Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.wm.com/v1/customers/:customerId/contacts",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates billing and service contact information for the customer account."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/cases",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves customer service cases associated with the account."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Preferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/preferences",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves customer preference settings including paperless billing and automatic payment preferences."
+        },
+        {
+          "info": {
+            "name": "Update Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.wm.com/v1/customers/:customerId/preferences",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates customer preference settings such as paperless billing and automatic payment enrollment."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tickets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tickets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/tickets",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves support and disposal tickets associated with the customer account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
