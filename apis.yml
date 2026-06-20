@@ -6,7 +6,7 @@ description: >-
   customers across the United States. WM provides RESTful APIs for customers and third-party integrators to access
   account data including balance, services, invoices, pickup schedules, and ETAs via JWT authentication.
 url: https://www.wm.com
-image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Environmental Services
   - Fortune 500
@@ -26,7 +26,7 @@ apis:
       details, invoice history, service details, pickup schedules, and ETA information. Uses JWT bearer token
       authentication with ClientId and Request-Tracking-Id headers.
     humanURL: https://api.wm.com/
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     properties:
       - type: Documentation
         url: https://api.wm.com/
