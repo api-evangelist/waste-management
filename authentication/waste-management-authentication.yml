@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/waste-management-customer-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: JSON Web Token (JWT) provided by WM.
+  sources:
+  - openapi/waste-management-customer-api-openapi.yml

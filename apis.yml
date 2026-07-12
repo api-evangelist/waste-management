@@ -41,6 +41,10 @@ apis:
       - Pickup Scheduling
       - REST
 common:
+  - type: DomainSecurity
+    url: security/waste-management-domain-security.yml
+  - type: Authentication
+    url: authentication/waste-management-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/waste-management
   - type: Website
