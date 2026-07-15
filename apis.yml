@@ -41,6 +41,8 @@ apis:
       - Pickup Scheduling
       - REST
 common:
+  - type: AgenticAccess
+    url: agentic-access/waste-management-agentic-access.yml
   - type: DomainSecurity
     url: security/waste-management-domain-security.yml
   - type: Authentication
