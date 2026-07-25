@@ -1,0 +1,92 @@
+openapi: 3.1.0
+info:
+  title: Waste Management Customer Cases Tickets API
+  description: The Waste Management Customer API provides RESTful access to customer account information including balance due, contract details, invoice history, service details, and pick-up status. The API uses JWT bearer token authentication and supports JSON and XML response formats. Endpoints are organized under the customer resource and cover activities, balance, cases, contacts, invoices, preferences, profiles, services, and tickets.
+  version: '1.0'
+  contact:
+    name: Waste Management Developer Support
+    url: https://api.wm.com/
+servers:
+- url: https://api.wm.com/v1
+  description: Production
+- url: https://apitest.wm.com/v1
+  description: Test
+tags:
+- name: Tickets
+  description: Retrieve disposal tickets and summaries.
+paths:
+  /customers/{customerId}/tickets:
+    get:
+      operationId: listTickets
+      summary: List Tickets
+      description: Retrieves support and disposal tickets associated with the customer account.
+      tags:
+      - Tickets
+      parameters:
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/RequestTrackingId'
+      - $ref: '#/components/parameters/ClientId'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JSON Web Token (JWT) provided by WM.

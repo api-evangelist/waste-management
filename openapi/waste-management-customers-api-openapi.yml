@@ -1,0 +1,166 @@
+openapi: 3.1.0
+info:
+  title: Waste Management Customer Cases Customers API
+  description: The Waste Management Customer API provides RESTful access to customer account information including balance due, contract details, invoice history, service details, and pick-up status. The API uses JWT bearer token authentication and supports JSON and XML response formats. Endpoints are organized under the customer resource and cover activities, balance, cases, contacts, invoices, preferences, profiles, services, and tickets.
+  version: '1.0'
+  contact:
+    name: Waste Management Developer Support
+    url: https://api.wm.com/
+servers:
+- url: https://api.wm.com/v1
+  description: Production
+- url: https://apitest.wm.com/v1
+  description: Test
+tags:
+- name: Customers
+  description: Retrieve and manage customer account information.
+paths:
+  /customers:
+    get:
+      operationId: getCustomerOverview
+      summary: Get Customer Overview
+      description: Retrieves customer account overview including balance due, contact and profile information, and services summary.
+      tags:
+      - Customers
+      parameters:
+      - $ref: '#/components/parameters/RequestTrackingId'
+      - $ref: '#/components/parameters/ClientId'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /customers/{customerId}/balance:
+    get:
+      operationId: getBalance
+      summary: Get Balance
+      description: Retrieves the current account balance due for the customer.
+      tags:
+      - Customers
+      parameters:
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/RequestTrackingId'
+      - $ref: '#/components/parameters/ClientId'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+  responses:
+    InternalError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    Address:
+      type: object
+      description: Physical service or billing address.
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+    Contact:
+      type: object
+      description: Contact information for a customer.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
+    CustomerOverview:
+      type: object
+      description: Overview of a WM customer account.
+      properties:
+        customerId:
+          type: string
+          description: Unique customer identifier.
+        accountName:
+          type: string
+          description: Customer account name.
+        balanceDue:
+          type: number
+          format: decimal
+          description: Current balance due on the account.
+        primaryContact:
+          $ref: '#/components/schemas/Contact'
+        serviceAddress:
+          $ref: '#/components/schemas/Address'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JSON Web Token (JWT) provided by WM.
