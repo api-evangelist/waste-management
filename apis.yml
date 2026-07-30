@@ -6,7 +6,20 @@ description: >-
   customers across the United States. WM provides RESTful APIs for customers and third-party integrators to access
   account data including balance, services, invoices, pickup schedules, and ETAs via JWT authentication.
 url: https://www.wm.com
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: enterprise
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Enterprise · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/waste-management.png
 tags:
   - Environmental Services
   - Fortune 500
@@ -19,27 +32,97 @@ modified: '2026-05-19'
 specificationVersion: '0.19'
 type: Index
 apis:
-  - aid: waste-management:waste-management-customer-api
-    name: Waste Management Customer API
-    description: >-
-      The Waste Management Customer API provides RESTful access to customer account data including balance, contract
-      details, invoice history, service details, pickup schedules, and ETA information. Uses JWT bearer token
-      authentication with ClientId and Request-Tracking-Id headers.
-    humanURL: https://api.wm.com/
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    properties:
-      - type: Documentation
-        url: https://api.wm.com/
-      - type: OpenAPI
-        url: openapi/waste-management-customer-api-openapi.yml
-      - type: SpectralRules
-        url: rules/waste-management-rules.yml
-    tags:
-      - Customer API
-      - Billing
-      - Services
-      - Pickup Scheduling
-      - REST
+- aid: waste-management:waste-management-cases-api
+  name: Waste Management Cases API
+  description: Retrieve and manage customer service cases.
+  humanURL: https://api.wm.com/
+  tags:
+  - Cases
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-cases-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-contacts-api
+  name: Waste Management Contacts API
+  description: Manage billing and service contacts.
+  humanURL: https://api.wm.com/
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-customers-api
+  name: Waste Management Customers API
+  description: Retrieve and manage customer account information.
+  humanURL: https://api.wm.com/
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-customers-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-invoices-api
+  name: Waste Management Invoices API
+  description: Retrieve invoice summaries and details.
+  humanURL: https://api.wm.com/
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-invoices-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-preferences-api
+  name: Waste Management Preferences API
+  description: Retrieve and update customer preference settings.
+  humanURL: https://api.wm.com/
+  tags:
+  - Preferences
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-preferences-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-services-api
+  name: Waste Management Services API
+  description: Retrieve service details, schedules, materials, and ETAs.
+  humanURL: https://api.wm.com/
+  tags:
+  - Services
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-services-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
+- aid: waste-management:waste-management-tickets-api
+  name: Waste Management Tickets API
+  description: Retrieve disposal tickets and summaries.
+  humanURL: https://api.wm.com/
+  tags:
+  - Tickets
+  properties:
+  - type: OpenAPI
+    url: openapi/waste-management-tickets-api-openapi.yml
+  - type: Documentation
+    url: https://api.wm.com/
+  - type: SpectralRules
+    url: rules/waste-management-rules.yml
 common:
   - type: AgenticAccess
     url: agentic-access/waste-management-agentic-access.yml
