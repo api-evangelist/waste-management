@@ -1,0 +1,26 @@
+{
+  "provider": "waste-management",
+  "sources": [
+    "waste-management-cases-api-openapi.yml",
+    "waste-management-contacts-api-openapi.yml",
+    "waste-management-customers-api-openapi.yml",
+    "waste-management-invoices-api-openapi.yml",
+    "waste-management-preferences-api-openapi.yml",
+    "waste-management-services-api-openapi.yml",
+    "waste-management-tickets-api-openapi.yml"
+  ],
+  "outputs": [
+    "waste-management-cases-api-openapi.yml",
+    "waste-management-contacts-api-openapi.yml",
+    "waste-management-customers-api-openapi.yml",
+    "waste-management-invoices-api-openapi.yml",
+    "waste-management-preferences-api-openapi.yml",
+    "waste-management-services-api-openapi.yml",
+    "waste-management-tickets-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
