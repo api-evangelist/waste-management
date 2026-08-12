@@ -137,7 +137,7 @@ common:
   - type: Portal
     url: https://api.wm.com/
   - type: OpenAPI
-    url: openapi/waste-management-customer-api-openapi.yml
+    url: openapi/_original/waste-management-customer-api-openapi.yml
   - type: SpectralRules
     url: rules/waste-management-rules.yml
   - type: JSONSchema
