@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Waste Management Customer Cases Contacts API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Contacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/contacts",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves billing and service contacts associated with the customer account."
+        },
+        {
+          "info": {
+            "name": "Update Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.wm.com/v1/customers/:customerId/contacts",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates billing and service contact information for the customer account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

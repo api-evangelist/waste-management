@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Waste Management Customer Cases Preferences API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Preferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wm.com/v1/customers/:customerId/preferences",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves customer preference settings including paperless billing and automatic payment preferences."
+        },
+        {
+          "info": {
+            "name": "Update Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.wm.com/v1/customers/:customerId/preferences",
+            "headers": [
+              {
+                "name": "Request-Tracking-Id",
+                "value": ""
+              },
+              {
+                "name": "ClientId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "customerId",
+                "value": "",
+                "type": "path",
+                "description": "The unique WM customer identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates customer preference settings such as paperless billing and automatic payment enrollment."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
