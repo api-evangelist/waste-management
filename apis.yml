@@ -6,6 +6,17 @@ description: >-
   customers across the United States. WM provides RESTful APIs for customers and third-party integrators to access
   account data including balance, services, invoices, pickup schedules, and ETAs via JWT authentication.
 url: https://www.wm.com
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: enterprise
   onboarding: self-serve
