@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Waste Management Customer Cases Customers API
+  title: Waste Management Customer Customers API
   description: The Waste Management Customer API provides RESTful access to customer account information including balance due, contract details, invoice history, service details, and pick-up status. The API uses JWT bearer token authentication and supports JSON and XML response formats. Endpoints are organized under the customer resource and cover activities, balance, cases, contacts, invoices, preferences, profiles, services, and tickets.
   version: '1.0'
   contact:
@@ -57,57 +57,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    RequestTrackingId:
-      name: Request-Tracking-Id
-      in: header
-      required: true
-      description: A unique identifier for tracking each API request.
-      schema:
-        type: string
-        format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-  responses:
-    InternalError:
-      description: Internal server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
-    Address:
-      type: object
-      description: Physical service or billing address.
-      properties:
-        street:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-        country:
-          type: string
     Contact:
       type: object
       description: Contact information for a customer.
@@ -158,6 +108,56 @@ components:
           $ref: '#/components/schemas/Contact'
         serviceAddress:
           $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      description: Physical service or billing address.
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+  responses:
+    InternalError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http

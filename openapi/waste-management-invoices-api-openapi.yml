@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Waste Management Customer Cases Invoices API
+  title: Waste Management Customer Invoices API
   description: The Waste Management Customer API provides RESTful access to customer account information including balance due, contract details, invoice history, service details, and pick-up status. The API uses JWT bearer token authentication and supports JSON and XML response formats. Endpoints are organized under the customer resource and cover activities, balance, cases, contacts, invoices, preferences, profiles, services, and tickets.
   version: '1.0'
   contact:
@@ -81,6 +81,13 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
     RequestTrackingId:
       name: Request-Tracking-Id
       in: header
@@ -96,27 +103,37 @@ components:
       description: Client identifier provided by Waste Management.
       schema:
         type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-  responses:
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    InvoiceLineItem:
+      type: object
+      description: A line item on a WM invoice.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        serviceId:
+          type: string
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
     InvoiceSummary:
       type: object
       description: Summary information for a WM invoice.
@@ -139,6 +156,14 @@ components:
         status:
           type: string
           description: Invoice status (e.g., Paid, Unpaid, Overdue).
+    InvoiceList:
+      type: object
+      description: List of invoices for a WM customer account.
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceSummary'
     InvoiceDetail:
       allOf:
       - $ref: '#/components/schemas/InvoiceSummary'
@@ -153,25 +178,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/InvoiceFee'
-    ErrorResponse:
-      type: object
-      description: Standard error response from the WM API.
-      properties:
-        code:
-          type: integer
-          description: HTTP status code.
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              description:
-                type: string
     InvoiceFee:
       type: object
       description: A fee applied to a WM invoice (fuel, environmental, regulatory).
@@ -182,25 +188,19 @@ components:
         amount:
           type: number
           format: decimal
-    InvoiceLineItem:
-      type: object
-      description: A line item on a WM invoice.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: decimal
-        serviceId:
-          type: string
-    InvoiceList:
-      type: object
-      description: List of invoices for a WM customer account.
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceSummary'
+  responses:
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http

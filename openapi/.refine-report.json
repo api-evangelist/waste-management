@@ -1,13 +1,7 @@
 {
   "provider": "waste-management",
   "sources": [
-    "waste-management-cases-api-openapi.yml",
-    "waste-management-contacts-api-openapi.yml",
-    "waste-management-customers-api-openapi.yml",
-    "waste-management-invoices-api-openapi.yml",
-    "waste-management-preferences-api-openapi.yml",
-    "waste-management-services-api-openapi.yml",
-    "waste-management-tickets-api-openapi.yml"
+    "_original/waste-management-customer-api-openapi.yml"
   ],
   "outputs": [
     "waste-management-cases-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "waste-management-customer-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "waste-management-cases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-contacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-customers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-invoices-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-preferences-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-services-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "waste-management-tickets-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
