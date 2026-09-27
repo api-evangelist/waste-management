@@ -165,29 +165,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-    RequestTrackingId:
-      name: Request-Tracking-Id
-      in: header
-      required: true
-      description: A unique identifier for tracking each API request.
-      schema:
-        type: string
-        format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
   schemas:
     ServiceEquipment:
       type: object
@@ -201,53 +178,6 @@ components:
           type: string
         containerCount:
           type: integer
-    ServicePricing:
-      type: object
-      description: Pricing information for a service.
-      properties:
-        monthlyBaseCost:
-          type: number
-          format: decimal
-        currency:
-          type: string
-          default: USD
-    ErrorResponse:
-      type: object
-      description: Standard error response from the WM API.
-      properties:
-        code:
-          type: integer
-          description: HTTP status code.
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              description:
-                type: string
-    ServiceMaterial:
-      type: object
-      description: Material information for a service.
-      properties:
-        materialCode:
-          type: string
-        materialName:
-          type: string
-        specialHandling:
-          type: boolean
-    ServiceList:
-      type: object
-      description: List of services associated with a WM customer account.
-      properties:
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/Service'
     Service:
       type: object
       description: A WM service associated with a customer account.
@@ -277,19 +207,89 @@ components:
           $ref: '#/components/schemas/ServiceEquipment'
         pricing:
           $ref: '#/components/schemas/ServicePricing'
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
+    ServiceList:
+      type: object
+      description: List of services associated with a WM customer account.
+      properties:
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+    ServiceMaterial:
+      type: object
+      description: Material information for a service.
+      properties:
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        specialHandling:
+          type: boolean
+    ServicePricing:
+      type: object
+      description: Pricing information for a service.
+      properties:
+        monthlyBaseCost:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: USD
   responses:
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: Resource not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

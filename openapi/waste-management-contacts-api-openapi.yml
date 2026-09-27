@@ -59,43 +59,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-    RequestTrackingId:
-      name: Request-Tracking-Id
-      in: header
-      required: true
-      description: A unique identifier for tracking each API request.
-      schema:
-        type: string
-        format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
   schemas:
-    ContactUpdate:
-      type: object
-      description: Fields to update on a customer contact record.
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
     ErrorResponse:
       type: object
       description: Standard error response from the WM API.
@@ -115,6 +79,42 @@ components:
                 type: string
               description:
                 type: string
+    ContactUpdate:
+      type: object
+      description: Fields to update on a customer contact record.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+  parameters:
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
   responses:
     Unauthorized:
       description: Unauthorized — invalid or missing JWT token.

@@ -126,6 +126,8 @@ apis:
   description: Retrieve disposal tickets and summaries.
   humanURL: https://api.wm.com/
   tags:
+  - Ticketing
+  tags_raw:
   - Tickets
   properties:
   - type: OpenAPI
