@@ -57,20 +57,61 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    InternalError:
-      description: Internal server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    RequestTrackingId:
+      name: Request-Tracking-Id
+      in: header
+      required: true
+      description: A unique identifier for tracking each API request.
+      schema:
+        type: string
+        format: uuid
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
   schemas:
+    CustomerOverview:
+      type: object
+      description: Overview of a WM customer account.
+      properties:
+        customerId:
+          type: string
+          description: Unique customer identifier.
+        accountName:
+          type: string
+          description: Customer account name.
+        balanceDue:
+          type: number
+          format: decimal
+          description: Current balance due on the account.
+        primaryContact:
+          $ref: '#/components/schemas/Contact'
+        serviceAddress:
+          $ref: '#/components/schemas/Address'
+    Contact:
+      type: object
+      description: Contact information for a customer.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
     ErrorResponse:
       type: object
       description: Standard error response from the WM API.
@@ -104,60 +145,19 @@ components:
           type: string
         country:
           type: string
-    CustomerOverview:
-      type: object
-      description: Overview of a WM customer account.
-      properties:
-        customerId:
-          type: string
-          description: Unique customer identifier.
-        accountName:
-          type: string
-          description: Customer account name.
-        balanceDue:
-          type: number
-          format: decimal
-          description: Current balance due on the account.
-        primaryContact:
-          $ref: '#/components/schemas/Contact'
-        serviceAddress:
-          $ref: '#/components/schemas/Address'
-    Contact:
-      type: object
-      description: Contact information for a customer.
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-  parameters:
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
-    RequestTrackingId:
-      name: Request-Tracking-Id
-      in: header
-      required: true
-      description: A unique identifier for tracking each API request.
-      schema:
-        type: string
-        format: uuid
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
+  responses:
+    InternalError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http
