@@ -80,6 +80,91 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  schemas:
+    InvoiceLineItem:
+      type: object
+      description: A line item on a WM invoice.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        serviceId:
+          type: string
+    InvoiceList:
+      type: object
+      description: List of invoices for a WM customer account.
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceSummary'
+    InvoiceFee:
+      type: object
+      description: A fee applied to a WM invoice (fuel, environmental, regulatory).
+      properties:
+        feeType:
+          type: string
+          description: Type of fee (e.g., Fuel Surcharge, Environmental Fee).
+        amount:
+          type: number
+          format: decimal
+    ErrorResponse:
+      type: object
+      description: Standard error response from the WM API.
+      properties:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
+    InvoiceSummary:
+      type: object
+      description: Summary information for a WM invoice.
+      properties:
+        invoiceId:
+          type: string
+          description: Unique invoice identifier.
+        invoiceDate:
+          type: string
+          format: date
+          description: Date the invoice was issued.
+        dueDate:
+          type: string
+          format: date
+          description: Payment due date.
+        totalAmount:
+          type: number
+          format: decimal
+          description: Total invoice amount.
+        status:
+          type: string
+          description: Invoice status (e.g., Paid, Unpaid, Overdue).
+    InvoiceDetail:
+      allOf:
+      - $ref: '#/components/schemas/InvoiceSummary'
+      - type: object
+        description: Detailed invoice information including line items.
+        properties:
+          lineItems:
+            type: array
+            items:
+              $ref: '#/components/schemas/InvoiceLineItem'
+          fees:
+            type: array
+            items:
+              $ref: '#/components/schemas/InvoiceFee'
   parameters:
     RequestTrackingId:
       name: Request-Tracking-Id
@@ -103,100 +188,15 @@ components:
       description: The unique WM customer identifier.
       schema:
         type: string
-  schemas:
-    InvoiceLineItem:
-      type: object
-      description: A line item on a WM invoice.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: decimal
-        serviceId:
-          type: string
-    InvoiceList:
-      type: object
-      description: List of invoices for a WM customer account.
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceSummary'
-    InvoiceSummary:
-      type: object
-      description: Summary information for a WM invoice.
-      properties:
-        invoiceId:
-          type: string
-          description: Unique invoice identifier.
-        invoiceDate:
-          type: string
-          format: date
-          description: Date the invoice was issued.
-        dueDate:
-          type: string
-          format: date
-          description: Payment due date.
-        totalAmount:
-          type: number
-          format: decimal
-          description: Total invoice amount.
-        status:
-          type: string
-          description: Invoice status (e.g., Paid, Unpaid, Overdue).
-    ErrorResponse:
-      type: object
-      description: Standard error response from the WM API.
-      properties:
-        code:
-          type: integer
-          description: HTTP status code.
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              description:
-                type: string
-    InvoiceFee:
-      type: object
-      description: A fee applied to a WM invoice (fuel, environmental, regulatory).
-      properties:
-        feeType:
-          type: string
-          description: Type of fee (e.g., Fuel Surcharge, Environmental Fee).
-        amount:
-          type: number
-          format: decimal
-    InvoiceDetail:
-      allOf:
-      - $ref: '#/components/schemas/InvoiceSummary'
-      - type: object
-        description: Detailed invoice information including line items.
-        properties:
-          lineItems:
-            type: array
-            items:
-              $ref: '#/components/schemas/InvoiceLineItem'
-          fees:
-            type: array
-            items:
-              $ref: '#/components/schemas/InvoiceFee'
   responses:
-    NotFound:
-      description: Resource not found.
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
+    NotFound:
+      description: Resource not found.
       content:
         application/json:
           schema:
