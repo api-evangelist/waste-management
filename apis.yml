@@ -137,6 +137,9 @@ apis:
   - type: SpectralRules
     url: rules/waste-management-rules.yml
 common:
+  - type: CapabilityMap
+    url: capabilities/waste-management-capability-edges.yml
+    name: Waste Management Business Capability Map
   - type: AgenticAccess
     url: agentic-access/waste-management-agentic-access.yml
   - type: DomainSecurity
