@@ -58,37 +58,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Contact:
-      type: object
-      description: Contact information for a customer.
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-    CustomerOverview:
-      type: object
-      description: Overview of a WM customer account.
-      properties:
-        customerId:
-          type: string
-          description: Unique customer identifier.
-        accountName:
-          type: string
-          description: Customer account name.
-        balanceDue:
-          type: number
-          format: decimal
-          description: Current balance due on the account.
-        primaryContact:
-          $ref: '#/components/schemas/Contact'
-        serviceAddress:
-          $ref: '#/components/schemas/Address'
     ErrorResponse:
       type: object
       description: Standard error response from the WM API.
@@ -122,12 +91,50 @@ components:
           type: string
         country:
           type: string
+    Contact:
+      type: object
+      description: Contact information for a customer.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+    CustomerOverview:
+      type: object
+      description: Overview of a WM customer account.
+      properties:
+        customerId:
+          type: string
+          description: Unique customer identifier.
+        accountName:
+          type: string
+          description: Customer account name.
+        balanceDue:
+          type: number
+          format: decimal
+          description: Current balance due on the account.
+        primaryContact:
+          $ref: '#/components/schemas/Contact'
+        serviceAddress:
+          $ref: '#/components/schemas/Address'
   parameters:
     CustomerId:
       name: customerId
       in: path
       required: true
       description: The unique WM customer identifier.
+      schema:
+        type: string
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
       schema:
         type: string
     RequestTrackingId:
@@ -138,13 +145,6 @@ components:
       schema:
         type: string
         format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
   responses:
     Unauthorized:
       description: Unauthorized — invalid or missing JWT token.

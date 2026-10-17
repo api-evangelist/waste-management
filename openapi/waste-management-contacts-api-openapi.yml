@@ -60,19 +60,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ContactUpdate:
-      type: object
-      description: Fields to update on a customer contact record.
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
     ErrorResponse:
       type: object
       description: Standard error response from the WM API.
@@ -92,20 +79,34 @@ components:
                 type: string
               description:
                 type: string
-  responses:
-    BadRequest:
-      description: Bad request — validation error in request parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+    ContactUpdate:
+      type: object
+      description: Fields to update on a customer contact record.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
   parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
     RequestTrackingId:
       name: Request-Tracking-Id
       in: header
@@ -114,20 +115,19 @@ components:
       schema:
         type: string
         format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request — validation error in request parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http

@@ -81,35 +81,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    InvoiceLineItem:
-      type: object
-      description: A line item on a WM invoice.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: decimal
-        serviceId:
-          type: string
-    InvoiceList:
-      type: object
-      description: List of invoices for a WM customer account.
-      properties:
-        invoices:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceSummary'
-    InvoiceFee:
-      type: object
-      description: A fee applied to a WM invoice (fuel, environmental, regulatory).
-      properties:
-        feeType:
-          type: string
-          description: Type of fee (e.g., Fuel Surcharge, Environmental Fee).
-        amount:
-          type: number
-          format: decimal
     ErrorResponse:
       type: object
       description: Standard error response from the WM API.
@@ -151,6 +122,16 @@ components:
         status:
           type: string
           description: Invoice status (e.g., Paid, Unpaid, Overdue).
+    InvoiceFee:
+      type: object
+      description: A fee applied to a WM invoice (fuel, environmental, regulatory).
+      properties:
+        feeType:
+          type: string
+          description: Type of fee (e.g., Fuel Surcharge, Environmental Fee).
+        amount:
+          type: number
+          format: decimal
     InvoiceDetail:
       allOf:
       - $ref: '#/components/schemas/InvoiceSummary'
@@ -165,7 +146,53 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/InvoiceFee'
+    InvoiceList:
+      type: object
+      description: List of invoices for a WM customer account.
+      properties:
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceSummary'
+    InvoiceLineItem:
+      type: object
+      description: A line item on a WM invoice.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        serviceId:
+          type: string
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
     RequestTrackingId:
       name: Request-Tracking-Id
       in: header
@@ -174,33 +201,6 @@ components:
       schema:
         type: string
         format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http

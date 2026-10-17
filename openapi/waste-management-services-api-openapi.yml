@@ -166,14 +166,35 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    ServiceList:
+    ErrorResponse:
       type: object
-      description: List of services associated with a WM customer account.
+      description: Standard error response from the WM API.
       properties:
-        services:
+        code:
+          type: integer
+          description: HTTP status code.
+        message:
+          type: string
+          description: Human-readable error message.
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/Service'
+            type: object
+            properties:
+              field:
+                type: string
+              description:
+                type: string
+    ServicePricing:
+      type: object
+      description: Pricing information for a service.
+      properties:
+        monthlyBaseCost:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: USD
     Service:
       type: object
       description: A WM service associated with a customer account.
@@ -203,45 +224,6 @@ components:
           $ref: '#/components/schemas/ServiceEquipment'
         pricing:
           $ref: '#/components/schemas/ServicePricing'
-    ServicePricing:
-      type: object
-      description: Pricing information for a service.
-      properties:
-        monthlyBaseCost:
-          type: number
-          format: decimal
-        currency:
-          type: string
-          default: USD
-    ErrorResponse:
-      type: object
-      description: Standard error response from the WM API.
-      properties:
-        code:
-          type: integer
-          description: HTTP status code.
-        message:
-          type: string
-          description: Human-readable error message.
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-              description:
-                type: string
-    ServiceMaterial:
-      type: object
-      description: Material information for a service.
-      properties:
-        materialCode:
-          type: string
-        materialName:
-          type: string
-        specialHandling:
-          type: boolean
     ServiceEquipment:
       type: object
       description: Equipment details for a service.
@@ -254,7 +236,52 @@ components:
           type: string
         containerCount:
           type: integer
+    ServiceList:
+      type: object
+      description: List of services associated with a WM customer account.
+      properties:
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service'
+    ServiceMaterial:
+      type: object
+      description: Material information for a service.
+      properties:
+        materialCode:
+          type: string
+        materialName:
+          type: string
+        specialHandling:
+          type: boolean
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized — invalid or missing JWT token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      description: The unique WM customer identifier.
+      schema:
+        type: string
+    ClientId:
+      name: ClientId
+      in: header
+      required: true
+      description: Client identifier provided by Waste Management.
+      schema:
+        type: string
     RequestTrackingId:
       name: Request-Tracking-Id
       in: header
@@ -263,33 +290,6 @@ components:
       schema:
         type: string
         format: uuid
-    ClientId:
-      name: ClientId
-      in: header
-      required: true
-      description: Client identifier provided by Waste Management.
-      schema:
-        type: string
-    CustomerId:
-      name: customerId
-      in: path
-      required: true
-      description: The unique WM customer identifier.
-      schema:
-        type: string
-  responses:
-    Unauthorized:
-      description: Unauthorized — invalid or missing JWT token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http
